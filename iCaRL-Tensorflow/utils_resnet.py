@@ -5,7 +5,7 @@ try:
 except:
     import _pickle as cPickle
 
-
+#定义激活函数，当alpha=0时表示没有使用激活函数，或者说是线性激活函数
 def relu(x, name, alpha):
     if alpha > 0:
         return tf.maximum(alpha * x, x, name=name)
@@ -112,6 +112,7 @@ def ResNet18(inp, phase, num_outputs=1000, alpha=0.0):
         layer = conv(layer, 'resconv2'+nom, size=3, strides=[1, 1, 1, 1], out_channels=out_num_filters, apply_relu=False,alpha=alpha, padding='SAME')
         layer = batch_norm(layer, 'batch_norm_resconv2'+nom, phase=phase)
         
+        #这里的projection表示进行一次降维，为了保证张量大小相同能够进行残差运算，这里唯一的不同就是stride的参数是[1, 2, 2, 1]而不是[1,1,1,1]
         if increase_dim:
                 projection = conv(inp, 'projconv'+nom, size=1, strides=[1, 2, 2, 1], out_channels=out_num_filters, alpha=alpha, apply_relu=False,padding='SAME',bias=False)
                 projection = batch_norm(projection, 'batch_norm_projconv'+nom, phase=phase)
@@ -120,6 +121,7 @@ def ResNet18(inp, phase, num_outputs=1000, alpha=0.0):
                 else:
                     block = layer + projection
                     block = tf.nn.relu(block, name='relu')
+        #这里表示正常的链接，即不用改变维度
         else:
             if last:
                 block = layer + inp
