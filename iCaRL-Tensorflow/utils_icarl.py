@@ -55,7 +55,7 @@ def prepare_networks(gpu,image_batch, nb_cl, nb_groups):
     with tf.device('/gpu:' + gpu):
         score = utils_resnet.ResNet18(image_batch-mean_img, phase='train',num_outputs=nb_cl*nb_groups)
         scores.append(score)
-    
+    #tensorflow中图一旦确定就不能再改变，所以输入一遍后，得用如下代码，从而能在次输入
     scope = tf.get_variable_scope()
     scope.reuse_variables()
   
