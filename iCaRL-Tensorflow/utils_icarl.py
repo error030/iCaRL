@@ -48,6 +48,7 @@ def load_class_in_feature_space(files_from_cl,batch_size,scores, label_batch,los
     label_dico      = np.array(label_dico)
     return Dtot,processed_files,label_dico
 
+#
 def prepare_networks(gpu,image_batch, nb_cl, nb_groups):
   mean_img = tf.constant([123.68, 116.779, 103.939], dtype=tf.float32, shape=[1, 1, 1, 3], name='img_mean')
   scores   = []
